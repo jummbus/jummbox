@@ -15,6 +15,28 @@ export class ColorConfig {
     public static colorLookup: Map<number, ChannelColors> = new Map<number, ChannelColors>();
 	public static usesColorFormula: boolean = false;
     public static readonly themes: { [name: string]: string } = {
+	"plixobox-neon": `
+		:root {
+			--page-margin: #1e0b29;
+			--editor-background: #1e0b29;
+			--hover-preview: #00ff66;
+			--playhead: #00ff66;
+			--primary-text: #ffffff;
+			--secondary-text: #ff4d6d;
+			--inverted-text: #1e0b29;
+			--text-selection: rgba(0, 255, 102, 0.9);
+			--box-selection-fill: rgba(0, 255, 102, 0.2);
+			--loop-accent: #00ff66;
+			--link-accent: #ff4d6d;
+			--ui-widget-background: #2d001e;
+			--ui-widget-focus: #ff4d6d;
+			--pitch-background: #1e0b29;
+			--tonic: #ff4d6d;
+			--fifth-note: #00ff66;
+			--white-piano-key: #ffffff;
+			--black-piano-key: #2d001e;
+		}
+	`,
         "dark classic": `
 			:root {
 				--page-margin: black;
