@@ -31,21 +31,33 @@ export class SongRecoveryPrompt implements Prompt {
 		}
 			
 		for (const song of songs) {
-				const versionMenu: HTMLSelectElement = select({style: "width: 100%;"});
+				const versionMenu: HTMLSelectElement = select({style: "width: 100%; margin: -2px 0;"});
 				
 			for (const version of song.versions) {
 				versionMenu.appendChild(option({ value: version.time }, version.name + ": " + new Date(version.time).toLocaleString()));
 			}
 				
+			const removeButton: HTMLButtonElement = button({ type: "button", class: "remove-instrument" });
 				const player: HTMLIFrameElement = iframe({style: "width: 100%; height: 60px; border: none; display: block;"});
 			player.src = "player/" + (OFFLINE ? "index.html" : "") + "#song=" + window.localStorage.getItem(versionToKey(song.versions[0]));
-				const container: HTMLDivElement = div({style: "margin: 4px 0;"}, div({class: "selectContainer", style: "width: 100%; margin: 2px 0;"}, versionMenu), player);
+				const container: HTMLDivElement = div({style: "margin: 4px 0;"}, div({class: "instrument-bar"}, div({class: "selectContainer no-underline", style: "width: 91%; margin: 2px 0;"}, versionMenu), removeButton), player);
 			this._songContainer.appendChild(container);
 				
 			versionMenu.addEventListener("change", () => {
 				const version: RecoveredVersion = song.versions[versionMenu.selectedIndex];
 				player.contentWindow!.location.replace("player/" + (OFFLINE ? "index.html" : "") + "#song=" + window.localStorage.getItem(versionToKey(version)));
 				player.contentWindow!.dispatchEvent(new Event("hashchange"));
+			});
+
+			removeButton.addEventListener("click", () => {
+				if (!window.confirm("Delete this recovery entry? This cannot be undone.")) return;
+				for (const version of song.versions) {
+					localStorage.removeItem(versionToKey(version));
+				}
+				this._songContainer.removeChild(container);
+				if (this._songContainer.children.length === 0) {
+					this._songContainer.appendChild(p("There are no recovered songs available yet. Try making a song!"));
+				}
 			});
 		}
 	}
